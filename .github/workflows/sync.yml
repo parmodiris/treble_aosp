@@ -38,8 +38,8 @@ jobs:
         run: |
           ./treble_aosp/sync.sh
           unzip ${{ github.workspace }}/output/patches.zip -d ${{ github.workspace }}/output
-          rm -rf ${{ github.workspace }}/patches/trebledroid
-          cp -r ${{ github.workspace }}/output/patches ${{ github.workspace }}/patches/trebledroid
+          rm -rf ${{ github.workspace }}/aosp/treble_aosp/patches/trebledroid
+          cp -r ${{ github.workspace }}/output/patches ${{ github.workspace }}/aosp/treble_aosp/patches/trebledroid
         env:
           OUTPUT_DIR: ${{ github.workspace }}/output
         working-directory: ${{ github.workspace }}/aosp
@@ -51,6 +51,7 @@ jobs:
           git add ${{ github.workspace }}/patches/trebledroid
           git commit -m "feat(patches): sync with latest sources of TrebleDroid"
           git push -u origin
+        working-directory: ${{ github.workspace }}/aosp/treble_aosp
 
       - name: Upload Patches
         uses: actions/upload-artifact@v4
