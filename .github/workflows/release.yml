@@ -48,11 +48,9 @@ jobs:
           path: ${{ github.workspace }}/aosp/treble_aosp/ota.json
 
       - name: Upload ROM
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: ${{ github.workspace }}/output/*.xz
-          title: ${{ env.RELEASE_TITLE }}
           tag_name: ${{ env.RELEASE_TITLE }}
           body: "## Changelog\n- ...\n\n## Notes\n- ..."
           draft: true
-          prerelease: false
