@@ -79,21 +79,9 @@ buildVariant() {
     echo
 }
 
-buildVndkliteVariant() {
-    echo "--> Building $1-vndklite"
-    cd treble_adapter
-    sudo bash lite-adapter.sh "64" $OUTPUT_DIR/system-"$1".img
-    mv s.img $OUTPUT_DIR/system-"$1"-vndklite.img
-    sudo rm -rf d tmp
-    cd ..
-    echo
-}
-
 buildVariants() {
     buildVariant treble_arm64_bvN
     buildVariant treble_arm64_bgN
-    buildVndkliteVariant treble_arm64_bvN
-    buildVndkliteVariant treble_arm64_bgN
 }
 
 generatePackages() {
@@ -102,8 +90,7 @@ generatePackages() {
     find $OUTPUT_DIR/ -name "system-treble_*.img" | while read file; do
         filename="$(basename $file)"
         [[ "$filename" == *"_bvN"* ]] && variant="vanilla" || variant="gapps"
-        [[ "$filename" == *"-vndklite"* ]] && vndk="-vndklite" || vndk=""
-        name="aosp-arm64-ab-${variant}${vndk}-15.0-$buildDate"
+        name="aosp-arm64-ab-${variant}-15.0-$buildDate"
         xz -cv "$file" -T0 > $OUTPUT_DIR/"$name".img.xz
     done
     rm -rf $OUTPUT_DIR/system-*.img
@@ -120,8 +107,7 @@ generateOta() {
         while read file; do
             filename="$(basename $file)"
             [[ "$filename" == *"-vanilla"* ]] && variant="v" || variant="g"
-            [[ "$filename" == *"-vndklite"* ]] && vndk="-vndklite" || vndk=""
-            name="treble_arm64_b${variant}N${vndk}"
+            name="treble_arm64_b${variant}N"
             size=$(wc -c $file | awk '{print $1}')
             url="https://github.com/ponces/treble_aosp/releases/download/$version/$filename"
             json="${json} {\"name\": \"$name\",\"size\": \"$size\",\"url\": \"$url\"},"
